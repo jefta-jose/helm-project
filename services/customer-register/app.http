@@ -1,0 +1,8 @@
+### register endpoint
+POST http://localhost:3001/register
+Content-Type: application/json
+
+{
+    "email": "todayismybirthday12@gmail.com",
+    "password": "testpassword12"
+}
