@@ -1,0 +1,8 @@
+### purchase product endpoint
+POST http://localhost:3002/purchase
+Content-Type: application/json
+
+{
+    "user_id": 2,
+    "product_id": 2
+}
