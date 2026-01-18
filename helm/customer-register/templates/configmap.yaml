@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "register-customer.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "register-customer.labels" . | nindent 4 }}
+data:
+  DB_HOST: {{ .Values.db.host | quote }}
+  DB_PORT: {{ .Values.db.port | quote }}
+  DB_NAME: {{ .Values.db.name | quote }}
+  DB_USER: {{ .Values.db.user | quote }}
+  PORT: {{ .Values.service.port | quote }}
