@@ -1,3 +1,4 @@
+# metadata
 apiVersion: v2
 name: customer-register
 description: A Helm chart for Kubernetes
