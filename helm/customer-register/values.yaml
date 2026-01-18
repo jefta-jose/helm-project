@@ -10,6 +10,8 @@ image:
   pullPolicy: IfNotPresent
 
 service:
+  # cluster ip is for internal communication within the cluster
+  # we will have to use port-forward for local testing or an ingress or a load balancer for external access
   type: ClusterIP
   port: 3011
 
