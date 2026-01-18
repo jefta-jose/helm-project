@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "postgres-db.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "postgres-db.labels" . | nindent 4 }}
+data:
+  POSTGRES_DB: {{ .Values.db.db_name | quote }}
+  POSTGRES_USER: {{ .Values.db.user | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "postgres-db.fullname" . }}-init
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "postgres-db.labels" . | nindent 4 }}
+data:
+  init.sql: |
+    -- Database initialization script
+    -- This file is automatically executed by Postgres on first startup
+
+    -- Create tables
+    CREATE TABLE IF NOT EXISTS users (
+      user_id SERIAL PRIMARY KEY,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS products (
+      product_id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      price NUMERIC(10,2) NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS purchases (
+      purchase_id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL,
+      product_id INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(user_id),
+      FOREIGN KEY (product_id) REFERENCES products(product_id)
+    );
+
+    -- Seed initial data
+    INSERT INTO users(email, password) VALUES
+    ('ndegwajeff4@gmail.com', 'my1234password'),
+    ('catendegwa4@gmail.com', 'my1234password')
+    ON CONFLICT (email) DO NOTHING;
+
+    INSERT INTO products(name, price) VALUES
+    ('Laptop', 1200.00),
+    ('Mouse', 25.50)
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO purchases(user_id, product_id) VALUES
+    (1, 1),
+    (2, 2)
+    ON CONFLICT DO NOTHING;

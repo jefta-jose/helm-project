@@ -2,10 +2,10 @@ replicaCount: 2
 
 namespace:
   create: true
-  name: customer-services
+  name: postgres-database
 
 image:
-  repository: customer-register
+  repository: postgres
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -13,7 +13,7 @@ service:
   # cluster ip is for internal communication within the cluster
   # we will have to use port-forward for local testing or an ingress or a load balancer for external access
   type: ClusterIP
-  port: 3011
+  port: 5432
 
 resources:
   requests:
@@ -30,10 +30,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 70
 
 db:
-  # since the services are deployed on different namespaces we need to use the full dns name to access the db service
-  host: db-postgres-db.postgres-database.svc.cluster.local
-  port: 5432
-  name: helm_project
+  db_name: helm_project
   user: postgres
 
 secrets:
